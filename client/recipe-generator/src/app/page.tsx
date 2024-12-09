@@ -3,6 +3,7 @@
 "use client";
 
 import { useState } from "react";
+import getResponse from "./api/route";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
@@ -13,7 +14,9 @@ export default function ChatPage() {
   const handleSend = async () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, sender: "user" }]);
-      // Add code to call your recipe recommendation API here
+      const response = await getResponse(input);
+      console.log('Response:', response);
+      setMessages((prevMessages) => [...prevMessages, { text: response, sender: "bot" }]);
       setInput("");
     }
   };

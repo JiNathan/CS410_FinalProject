@@ -1,0 +1,7 @@
+__pycache__
+.env
+RAW_recipes.csv
+my_dataframe.pkl
+w2v_model.pkl
+tag_encoder.pkl
+transformed_recipes.csv

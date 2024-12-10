@@ -123,5 +123,4 @@ if __name__ == "__main__":
         top_k=10
     )
     print(top_recipes.keys())
-    # pickle.load("tag_encoder.pkl")
 

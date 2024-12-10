@@ -1,5 +1,18 @@
 # CS410_FinalProject
 
+
+# How to run the code:
+
+Backend Setup: The bulk of the code will be within the recipe_recommender.py, but to get the local files on your machine, you will need to run db_trainingpreprocess.py. To do this,
+first download RAW_recipes.csv (https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=RAW_recipes.csv) -- !It is extremely important to download RAW_recipes.csv and not any of the other 8 datasets on the website! Then, replace line 69 on db_trainingpreprocess.py (file_path = r"C:\Users\natha\Downloads\RAW_recipes.csv") with your filepath and double check that your file path ends with the same file as the example code. Then, you can run this file, and then after you should see four new files in your local directory: transformed_recipes.csv, my_dataframe.pkl, tag_encoder.pkl, and w2v_model.pkl. You can then run recipe_recommender.py as well as begin to start the chatbot. If you wish, you can play around in the example code area of the file as well.
+
+
+
+
+
+
+# Report
+
 The Recipe Recommendation Engine
 The recommendation engine aims to assist users in finding recipes tailored to their queries by analyzing and comparing textual attributes like names, descriptions, and tags. It uses a dataset of recipes and implements techniques for text encoding, feature extraction, and similarity computation to return the most relevant matches.
 

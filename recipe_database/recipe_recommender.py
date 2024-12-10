@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+from dotenv import load_dotenv
 import pickle
 from nltk.tokenize import word_tokenize
 
@@ -10,7 +11,8 @@ file_path_recipes = "my_dataframe.pkl"
 if os.path.exists(file_path_recipes):
     recipe_df = pd.read_pickle('my_dataframe.pkl')
 else:
-    file_path = r"C:\Users\natha\Downloads\RAW_recipes.csv"
+    load_dotenv()
+    file_path = os.getenv('file_path', './RAW_recipes.csv')
     #Read in the CSV
     recipe_df = pd.read_csv(file_path)
     recipe_df.to_pickle("my_dataframe.pkl")

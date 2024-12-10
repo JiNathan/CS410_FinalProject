@@ -2,21 +2,57 @@
 
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import getResponse from "./api/route";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
     { text: "Hello user! List ingredients to get recipe suggestions! Remember to put a comma (,) in between each ingredient listed", sender: "bot" }
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
+    if (loading) {
+      return;
+    }
     if (input.trim()) {
-      setMessages([...messages, { text: input, sender: "user" }]);
-      // Add code to call your recipe recommendation API here
+      setLoading(true);
+      setMessages((prevMessages) => [...prevMessages, { text: input, sender: "user" }]);
+      setMessages((prevMessages) => [...prevMessages, { text: 'Generating recipes...', sender: "bot" }]);
+      const query = input;
       setInput("");
+      const response = await getResponse(query);
+      console.log('Response:', response);
+      const lines = response.split("\n\n\n")
+      lines.map((line: string, index: number) => {
+        setMessages((prevMessages) => [...prevMessages, { text: line, sender: "bot" }]);
+      });
+      setLoading(false);
     }
   };
+
+  const formatText1 = (text: string): JSX.Element[] => {
+    const lines = text.split("\n");
+    return lines.map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        {index < lines.length-1 && <br />}
+      </React.Fragment>
+    ));
+  };
+  
+  const formatText2 = (text: string): JSX.Element[] => {
+    const lines = text.split("\n\n");
+    return lines.map((line, index) => (
+      <React.Fragment key={index}>
+        {formatText1(line)}
+        {index < lines.length-1 && <br />}
+        {index < lines.length-1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
 
   return (
     <div className="bg-gray-200 min-h-screen flex items-center justify-center p-5">
@@ -36,7 +72,7 @@ export default function ChatPage() {
                 msg.sender === "user" ? "bg-blue-500 text-white self-end" : "bg-gray-300 text-gray-900 self-start"
               } p-3 rounded-lg max-w-xs`}
             >
-              {msg.text}
+              {formatText2(msg.text)}
             </div>
           ))}
         </div>

@@ -6,8 +6,10 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 import os
-nltk.download('punkt')
+from dotenv import load_dotenv
 import pickle
+nltk.download('punkt')
+nltk.download('punkt_tab')
 
 # Step 1: Normalize numeric columns (minutes, n_steps)
 def normalize_numeric_columns(df, columns):
@@ -65,7 +67,8 @@ file_path_model = "my_dataframe.pkl"
 if os.path.exists(file_path_model):
     recipe_df = pd.read_pickle('my_dataframe.pkl')
 else:
-    file_path = r"C:\Users\natha\Downloads\RAW_recipes.csv"
+    load_dotenv()
+    file_path = os.getenv('file_path', './RAW_recipes.csv')
     #Read in the CSV
     recipe_df = pd.read_csv(file_path)
     recipe_df.to_pickle("my_dataframe.pkl")

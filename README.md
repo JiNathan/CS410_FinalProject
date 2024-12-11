@@ -1,44 +1,75 @@
-# CS410_FinalProject
+# Recipe Recommender System
+UIUC CS 410 (Text Information Systems) Final Project
+
+## Getting Started
+
+### Dependencies
+
+* Node.js v20.17
+* npm v10.8
+* Python v3.11
+* pip v24.3
+
+### Installing
+
+* Clone this GitHub repository
+```
+git clone https://github.com/JiNathan/CS410_FinalProject
+```
+* Navigate to the client directory
+```
+cd ./CS410_FinalProject/client/recipe-generator
+```
+* Install React dependencies on your local machine
+```
+npm install
+```
+* Navigate to the server directory
+```
+cd ../recipe_database
+```
+* Install server dependencies on your local machine
+```
+pip install numpy pandas scikit-learn nltk gensim flask flask-cors python-dotenv
+```
+* Download 'RAW_recipes.csv' from https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=RAW_recipes.csv
+* Add your file path to the csv you just downloaded to a .env file
+```
+echo "file_path = [YOUR_FILE_PATH]\RAW_recipes.csv" >> .env
+```
+* Preprocess the data and train that model. Note: this may take between 5-10 minutes to execute
+```
+python db_trainingpreprocess.py
+```
+
+### Executing client (React app)
+
+* Navigate to the client directory
+```
+cd client/recipe-generator
+```
+* Run on your local machine
+```
+npm run dev
+```
+* Open a web browser and navigate to http://localhost:3000
+
+### Executing server
+
+* Navigate to the server directory
+```
+cd recipe_database
+```
+* Run flask app in debug mode on your local machine
+```
+python app.py
+```
+* OR modify the example usage section at the bottom of recipe_recommender.py and run directly
+```
+python recipe_recommender.py
+```
 
 
-# How to run the code:
+## About
 
-Backend Setup: The bulk of the code will be within the recipe_recommender.py, but to get the local files on your machine, you will need to run db_trainingpreprocess.py. To do this,
-first download RAW_recipes.csv (https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=RAW_recipes.csv) -- !It is extremely important to download RAW_recipes.csv and not any of the other 8 datasets on the website! Then, replace line 69 on db_trainingpreprocess.py (file_path = r"C:\Users\natha\Downloads\RAW_recipes.csv") with your filepath and double check that your file path ends with the same file as the example code. Then, you can run this file, and then after you should see four new files in your local directory: transformed_recipes.csv, my_dataframe.pkl, tag_encoder.pkl, and w2v_model.pkl. You can then run recipe_recommender.py as well as begin to start the chatbot. If you wish, you can play around in the example code area of the file as well.
-
-
-
-
-
-
-# Report
-
-The Recipe Recommendation Engine
-The recommendation engine aims to assist users in finding recipes tailored to their queries by analyzing and comparing textual attributes like names, descriptions, and tags. It uses a dataset of recipes and implements techniques for text encoding, feature extraction, and similarity computation to return the most relevant matches.
-
-Key Topics in Text-Information Systems
-1. Text Vectorization with Word2Vec
-A cornerstone of the system is the transformation of textual data into numerical representations using Word2Vec. This word-embedding technique maps words in a high-dimensional vector space where semantic relationships between words are preserved, which is used similairly to how it was applied throughout CS 410 like in HW 1. For instance, words like "chicken" and "turkey" may have similar vector representations due to their contextual similarity in recipes, which allows us to provide relevant documents back to the user.
-
-In this project, the Word2Vec model was trained using tokenized recipe names and descriptions. Each word's vector was averaged to create a fixed-length representation for each recipe. This representation enabled efficient computation of similarities between user queries and recipes. This was particularly critical so that the query and the recipe will be able to compare semantic meanings, which provided a very accurate system that would provide relevant feedback to the user.
-
-2. Feature Engineering and Data Transformation
-The engine combines several features to represent a recipe:
-
-Normalized Numeric Features: Recipe metadata like preparation time (minutes) and steps (n_steps) were scaled using StandardScaler. Normalization ensures these features have equal weight in similarity computations, which was a very importance concept throughout the class in preprocessing data to ensure for stable mathematical computations.
-One-Hot Encoding of Tags: Tags like "vegetarian," "easy," and "gluten-free" were one-hot encoded using MultiLabelBinarizer. This created a binary vector where each dimension indicates the presence of a specific tag. This was meant to model the bit-vector discussions had in class, describing how words can be matched to documents, but instead we preform tagging and tag-extraction of the queries.
-
-3. Similarity Computation and Ranking
-To find relevant recipes, the engine computes the cosine similarity between query vectors and recipe vectors. Cosine similarity is an effective measure for comparing high-dimensional vectors by focusing on their directional alignment rather than magnitude, as the magnitude of these vectors do not contain as much information as their directional alignment due to the nature of W2V.
-
-The system uses a weighted combination of three similarity scores:
-
-Name Similarity: Measures the relevance of the recipe's name to the query.
-Description Similarity: Gives higher importance to detailed matches in recipe descriptions.
-Tag Similarity: Emphasizes categorical matches like diet preferences or meal types.
-
-The weights (e.g., 0.6 for description similarity) were fine-tuned empirically, primarily using the same intuition as the feedback systems we used in class, where we logged the number of relevant documents compared to the contribution of the three similarities. This intuition was directly from the rocchio feedback algorithm where alpha, beta, and gamma were adjusted to move queries closer to relevant docs, but instead of changing the query in this case, we instead alter the ranking function in a similair manner.
-
-Another key factor of this ranking is that the dot product for Description and Tag simialirty were squared, which is a very similair intuition to concepts introduced into this class
-involving rank boosting and ranking algorithms, and the mathematical foundatin of this method can be found throughout the class include topics like MSE, etc. Squaring these two were
-critical for the preformance as it decrease non-relevant dot products and increases larger dot products, which allowed for bigger differences between non-relevant and relevant documents. Although in general this would boost the preformance of any recommendation system, we believe it was particularly important here as semantically, many of the recipes are similair as they are all within the same domain of words. For example, if we were doing websearch for the key "Steak", it would easily classify "Gold", "Computer", "Text" much further away from "Beef". However, the domain we search for instead only contains recipes, meaning "Steak" would be compared against "Pork", "Tofu", "Lamb", all of which may have very close similarities as "Beef". This observation was why squaring was implementing in this similarity function.
+This project aims to develop a recipe recommender system that leverages text information techniques to provide users with recipes based on their specifications. By analyzing various recipes’ ingredients, instructions, and previous user preferences, we can employ Natural Language Processing techniques (NLP) alongside the Word2Vec model to identify relevant recipes for the user. The system will focus on matching ingredients to recipes based on the similarity of the specific ingredient to the recipe as well as the similarity of related ingredients to the recipe. We will also associate words related to specific dietary restrictions with different recipes in order to provide the user with more relevant and useful recipes.
